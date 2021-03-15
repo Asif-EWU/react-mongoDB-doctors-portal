@@ -1,4 +1,5 @@
 import React from 'react';
+import InfoCard from '../InfoCard/InfoCard';
 
 const infoData = [
     {
@@ -23,9 +24,11 @@ const infoData = [
 
 const BusinessInfo = () => {
     return (
-        <div>
-            
-        </div>
+        <section className="row">
+            {
+                infoData.map(info => <InfoCard info={info}></InfoCard>)
+            }
+        </section>
     );
 };
 
