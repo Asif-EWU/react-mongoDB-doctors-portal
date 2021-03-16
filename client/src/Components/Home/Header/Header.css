@@ -1,5 +1,5 @@
 .header-container {
-    height:700px;
+    height: 800px;
     width:100%;
     position:relative;
     background-image: url('../../../images/chairBg.png');
@@ -7,7 +7,7 @@
     z-index: -1;
 }
 .header-container::after {
-    height:700px;
+    height: 800px;
     content:' ';
     position: absolute;
     top: 0;
