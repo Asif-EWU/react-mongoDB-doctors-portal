@@ -3,6 +3,7 @@ import Fluoride from '../../../images/fluoride.png'
 import Cavity from '../../../images/cavity.png'
 import Whitening from '../../../images/whitening.png'
 import ServiceDetail from '../ServiceDetail/ServiceDetail';
+import { Link } from "react-router-dom"
 
 const serviceData = [
     {
@@ -19,6 +20,12 @@ const serviceData = [
     }
 ]
 
+const myStyle = {
+    cursor: 'pointer',
+    display: 'block',
+    margin: '60px auto'
+}
+
 const Services = () => {
     return (
         <section className="services-container mt-5">
@@ -31,6 +38,9 @@ const Services = () => {
                     serviceData.map(service => <ServiceDetail service={service}></ServiceDetail>)
                 }
             </div>
+            <Link to="/addDoctor">
+                <button style={myStyle} className="btn btn-primary">Add Doctor</button>
+            </Link>
         </section>
     );
 };
