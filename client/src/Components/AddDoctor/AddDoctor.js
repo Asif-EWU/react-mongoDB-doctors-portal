@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Doctors from './Doctors';
 
 const AddDoctor = () => {
     const [info, setInfo] = useState({});
     const [file, setFile] = useState(null);
-    const [image, setImage] = useState('');
+    const [doctorList, setDoctorList] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/doctorList')
+        .then(res => res.json())
+        .then(data => setDoctorList(data))
+    }, []);
 
     const handleFileChange = e => {
         const newFile = e.target.files[0];
@@ -29,13 +36,13 @@ const AddDoctor = () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            setImage(`http://localhost:5000${data.path}`)
+            // setImage(`http://localhost:5000${data.path}`)
         })
         .catch(err => {
             console.log(err);
         })
 
-        e.preventDefault();
+        // e.preventDefault();
     }
 
     return (
@@ -56,7 +63,12 @@ const AddDoctor = () => {
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
 
-            <img style={{height: "500px"}} src={image} alt=""/>
+            <div className="row">
+                {
+                    doctorList.map((doctor, index) => <Doctors key={index.toString()} doctor={doctor}></Doctors>)
+                }
+            </div>
+            {/* <img style={{height: "500px"}} src={image} alt=""/> */}
         </div>
     );
 };

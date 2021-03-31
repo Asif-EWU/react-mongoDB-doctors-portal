@@ -22,13 +22,12 @@ app.get('/', (req, res) => {
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-    const appointmentCollection = client.db("doctorsPortal").collection("appointments");
+    const doctorCollection = client.db("doctorsPortal").collection("doctors");
 
-    app.post('/addAppointment', (req, res) => {
-        const appointment = req.body;
-        appointmentCollection.insertOne(appointment)
-            .then(result => {
-                res.send(result.insertedCount)
+    app.get('/doctorList', (req, res) => {
+        doctorCollection.find({})
+            .toArray((err, documents) => {
+                res.send(documents);
             })
     })
 
@@ -36,25 +35,24 @@ client.connect(err => {
         const name = req.body.name;
         const email = req.body.email;
         const file = req.files.file;
-        const filePath = `${__dirname}/doctors/${file.name}`; 
         console.log(name, email, file);
 
-        file.mv(filePath, err => {   // __dirname returns root directory path
-            if (err) {
-                console.log(err);
-                return res.status(500).send({ msg: 'Failed to upload Image' });
-            }
 
-            const newImg = fs.readFileSync(filePath);
-            const encImg = newImg.toString('base64');
+        console.log("Processing Image...");
 
-            doctorCollection.insrtOne({name, email, img:file.name})
+        const newImg = file.data;
+        const encImg = newImg.toString('base64');
+
+        const image = {
+            contentType: file.mimetype,  // mimetype = jpeg/png/jpg... etc
+            size: file.size,
+            img: Buffer.from(encImg, 'base64')
+        };
+
+        doctorCollection.insertOne({ name, email, image })
             .then(result => {
                 res.send(result.insrtedCount > 0);
             })
-
-            // return res.send({ name: file.name, path: `/${file.name}` });
-        });
     });
 });
 
